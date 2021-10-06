@@ -77,9 +77,6 @@ function UserWebview(props: Props, ref: any) {
 	}
 
 	function postMessage(name: string, args: any = null) {
-
-		console.log('!!! 10/ packages/app-desktop/services/plugins/UserWebview.tsx post Message to the window', name , args);
-
 		const win = frameWindow();
 		if (!win) return;
 

@@ -108,8 +108,6 @@ export default class WebviewController extends ViewController {
 
 		const messageId = `plugin_${Date.now()}${Math.random()}`;
 
-		console.log(`send message with new id ${messageId} and content: `, message);
-
 		PostMessageService.instance().postMessage({
 				pluginId : this.pluginId,
 				viewId : this.handle,
@@ -123,8 +121,6 @@ export default class WebviewController extends ViewController {
 	}
 
 	public async emitMessage(event: EmitMessageEvent): Promise<any> {
-
-		console.log("!!! 6/ the message is received by packages/lib/services/plugins/WebviewController.ts and we will call the plugin callback ");
 
 		if (!this.messageListener_) return;
 		return this.messageListener_(event.message);

@@ -136,10 +136,7 @@ const webviewApi = {
 				}
 			},
 
-			// Call it when we receive a message from PostMessageService
-			// that is if the postmessageservice is what we need
 			'postMessageService.plugin_message': (message) => {
-				console.log("!!! call view callback!");
 				cb_(message);
 			},
 		};

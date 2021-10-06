@@ -17,23 +17,24 @@ export default function(frameWindow: any, isReady: boolean, pluginId: string, vi
 
 		function onMessage_(event: any) {
 
-			// Registering a view that listens to a plugin
-			if (event.data && event.data.target === 'postMessageService.register') {
-				console.log('!!! a/ packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.ts register a new responder');
+			if(!event.data || !event.data.target) {
+				return;
+			}
+			
+			if (event.data.target === 'postMessageService.register') {
 				PostMessageService.instance().registerCallback(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {
-					console.log('!!! x/ packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.ts we call the responder which call postMessage() method registered at startup : ', event);
 					postMessage('postMessageService.plugin_message', { message });
 				});
 				return;
 			}
-
-			if (!event.data || event.data.target !== 'postMessageService.message') return;
-
-			void PostMessageService.instance().postMessage({
-				pluginId,
-				viewId,
-				...event.data.message,
-			});
+			//TODO could add unregister message to remove callback
+			else if (event.data.target === 'postMessageService.message') {
+				void PostMessageService.instance().postMessage({
+					pluginId,
+					viewId,
+					...event.data.message,
+				});
+			}
 		}
 
 		frameWindow.addEventListener('message', onMessage_);
