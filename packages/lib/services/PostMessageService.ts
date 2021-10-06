@@ -68,7 +68,7 @@ export default class PostMessageService {
 	}
 
 	public async postMessage(message: Message) {
-		logger.debug('postMessage:', message);
+		logger.debug('!!! 5/ packages/lib/services/PostMessageService.ts postMessage sends a message to the plugin by calling its view controller emitMessage() :', message);
 
 		let response = null;
 		let error = null;
@@ -93,11 +93,13 @@ export default class PostMessageService {
 			error = e;
 		}
 
+		console.log("!!! 7/ packages/lib/services/PostMessageService.ts postMessage receives the response from the plugin callback and sends a new message using the registered responder: ", message)
+
 		this.sendResponse(message, response, error);
 	}
 
 	private sendResponse(message: Message, responseContent: any, error: any) {
-		logger.debug('sendResponse', message, responseContent, error);
+		logger.debug('!!! packages/lib/services/PostMessageService.ts sendResponse', message, responseContent, error);
 
 		let responder: MessageResponder = null;
 
@@ -119,6 +121,9 @@ export default class PostMessageService {
 	}
 
 	private responder(type: ResponderComponentType, viewId: string): any {
+
+		console.log("!!! 8/ packages/lib/services/PostMessageService.ts responder will be called : ", this.responders_[[type, viewId].join(':')]);
+
 		return this.responders_[[type, viewId].join(':')];
 	}
 

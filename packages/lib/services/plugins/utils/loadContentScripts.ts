@@ -18,6 +18,9 @@ function postMessageHandler(pluginId: string, scriptType: ContentScriptType, con
 		if (scriptType === ContentScriptType.MarkdownItPlugin) {
 			logger.error('context.postMessage is not available to renderer content scripts');
 		} else {
+
+			console.log("!!! packages/lib/services/plugins/utils/loadContentScripts.ts postMessageHandler", message);
+
 			const plugin = PluginService.instance().pluginById(pluginId);
 			return plugin.emitContentScriptMessage(contentScriptId, message);
 		}
