@@ -23,6 +23,18 @@ export default function(frameWindow: any, isReady: boolean, pluginId: string, vi
 
 		function onMessage_(event: any) {
 
+			console.log('!!! a bis/ packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.ts register a new responder');
+
+			// Registering a view that listens to a plugin
+			if (event.data || event.data.target === 'postMessageService.register') {
+				PostMessageService.instance().registerResponder(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {
+					console.log('!!! d/ packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.ts has to contact responder : ', message);
+					postMessage('postMessageService.plugin_message', { message });
+				});
+				return;
+			}
+
+
 			console.log('!!! 4/ packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.ts receives a message to forward to the postMessage service : ', event);
 
 			if (!event.data || event.data.target !== 'postMessageService.message') return;

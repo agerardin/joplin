@@ -27,7 +27,7 @@ import PluginService from './plugins/PluginService';
 
 const logger = Logger.create('PostMessageService');
 
-enum MessageParticipant {
+export enum MessageParticipant {
 	ContentScript = 'contentScript',
 	Plugin = 'plugin',
 	UserWebview = 'userWebview',
@@ -74,6 +74,11 @@ export default class PostMessageService {
 		let error = null;
 
 		try {
+
+			if(message.to === MessageParticipant.UserWebview && message.from === MessageParticipant.Plugin) {
+				this.sendResponse(message, message, error);
+			}
+
 			if (message.from === MessageParticipant.ContentScript && message.to === MessageParticipant.Plugin) {
 
 				const pluginId = PluginService.instance().pluginIdByContentScriptId(message.contentScriptId);
@@ -93,7 +98,7 @@ export default class PostMessageService {
 			error = e;
 		}
 
-		console.log('!!! 7/ packages/lib/services/PostMessageService.ts postMessage receives the response from the plugin callback and sends a new message using the registered responder: ', message);
+		console.log("!!! 7/ packages/lib/services/PostMessageService.ts postMessage receives the response from the plugin callback and sends a new message using the registered responder: ", message)
 
 		this.sendResponse(message, response, error);
 	}
@@ -122,7 +127,7 @@ export default class PostMessageService {
 
 	private responder(type: ResponderComponentType, viewId: string): any {
 
-		console.log('!!! 8/ packages/lib/services/PostMessageService.ts responder will be called : ', this.responders_[[type, viewId].join(':')]);
+		console.log("!!! 8/ packages/lib/services/PostMessageService.ts responder will be called : ", this.responders_[[type, viewId].join(':')]);
 
 		return this.responders_[[type, viewId].join(':')];
 	}
