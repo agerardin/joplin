@@ -162,6 +162,7 @@ export default class PostMessageService {
 
 
 	public unregisterResponder(type: ResponderComponentType, viewId: string) {
+		console.log("!!! packages/lib/services/PostMessageService.ts  unregisterResponder");
 		delete this.responders_[[type, viewId].join(':')];
 	}
 

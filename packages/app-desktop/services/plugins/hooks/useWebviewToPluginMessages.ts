@@ -18,7 +18,7 @@ export default function(frameWindow: any, isReady: boolean, pluginId: string, vi
 		function onMessage_(event: any) {
 
 			// Registering a view that listens to a plugin
-			if (event.data || event.data.target === 'postMessageService.register') {
+			if (event.data && event.data.target === 'postMessageService.register') {
 				console.log('!!! a/ packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.ts register a new responder');
 				PostMessageService.instance().registerCallback(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {
 					console.log('!!! x/ packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.ts we call the responder which call postMessage() method registered at startup : ', event);
