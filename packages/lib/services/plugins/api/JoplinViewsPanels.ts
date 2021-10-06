@@ -76,10 +76,16 @@ export default class JoplinViewsPanels {
 	 */
 	public async onMessage(handle: ViewHandle, callback: Function) {
 
-		console.log('!!! 1/ the callback for plugin message is registered. ');
+		console.log("!!! 1/ the callback for plugin message is registered. ")
 
 		return this.controller(handle).onMessage(callback);
 	}
+
+	public postMessage(handle: ViewHandle, message : any) {
+		console.log("!!! a/ post message from plugin to view controller");
+		return this.controller(handle).postMessage(message);
+	}
+
 
 	/**
 	 * Shows the panel

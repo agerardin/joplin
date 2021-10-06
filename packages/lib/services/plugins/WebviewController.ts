@@ -2,7 +2,7 @@ import ViewController, { EmitMessageEvent } from './ViewController';
 import shim from '../../shim';
 import { ButtonSpec, DialogResult, ViewHandle } from './api/types';
 const { toSystemSlashes } = require('../../path-utils');
-import PostMessageService, { MessageResponse, ResponderComponentType, MessageParticipant } from '../PostMessageService';
+import PostMessageService, { MessageParticipant } from '../PostMessageService';
 
 export enum ContainerType {
 	Panel = 'panel',
@@ -109,7 +109,7 @@ export default class WebviewController extends ViewController {
 		const messageId = `plugin_${Date.now()}${Math.random()}`;
 
 		console.log(`send message with new id ${messageId} and content: `, message);
-		
+
 		PostMessageService.instance().postMessage({
 				pluginId : this.pluginId,
 				viewId : this.handle,

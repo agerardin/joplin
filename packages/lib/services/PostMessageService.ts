@@ -60,6 +60,7 @@ export default class PostMessageService {
 
 	private static instance_: PostMessageService;
 	private responders_: Record<string, MessageResponder> = {};
+	private callbacks_: Record<string, MessageResponder> = {};
 
 	public static instance(): PostMessageService {
 		if (this.instance_) return this.instance_;
@@ -76,7 +77,9 @@ export default class PostMessageService {
 		try {
 
 			if(message.to === MessageParticipant.UserWebview && message.from === MessageParticipant.Plugin) {
-				this.sendResponse(message, message, error);
+				console.log('!!! x/ packages/lib/services/PostMessageService.ts received message from plugin', message);
+				this.callback(message, message, error);
+				return;
 			}
 
 			if (message.from === MessageParticipant.ContentScript && message.to === MessageParticipant.Plugin) {
@@ -103,8 +106,20 @@ export default class PostMessageService {
 		this.sendResponse(message, response, error);
 	}
 
+	private callback(message: Message, responseContent: any, error: any) {
+		logger.debug('!!! packages/lib/services/PostMessageService.ts callback', responseContent, this.responders_);
+		
+		let callback = this.callbacks_[[ResponderComponentType.UserWebview, message.viewId].join(':')];
+
+		callback({
+			responseId: message.id,
+			response: responseContent,
+			error,
+		});
+	}
+
 	private sendResponse(message: Message, responseContent: any, error: any) {
-		logger.debug('!!! packages/lib/services/PostMessageService.ts sendResponse', message, responseContent, error);
+		logger.debug('!!! packages/lib/services/PostMessageService.ts sendResponse', responseContent, this.responders_);
 
 		let responder: MessageResponder = null;
 
@@ -127,14 +142,24 @@ export default class PostMessageService {
 
 	private responder(type: ResponderComponentType, viewId: string): any {
 
-		console.log("!!! 8/ packages/lib/services/PostMessageService.ts responder will be called : ", this.responders_[[type, viewId].join(':')]);
+		console.log("!!! packages/lib/services/PostMessageService.ts responder will be called : ", this.responders_[[type, viewId].join(':')]);
 
 		return this.responders_[[type, viewId].join(':')];
 	}
 
 	public registerResponder(type: ResponderComponentType, viewId: string, responder: MessageResponder) {
+
+		console.log("!!! packages/lib/services/PostMessageService.ts registerResponder");
+
 		this.responders_[[type, viewId].join(':')] = responder;
 	}
+
+	public registerCallback(type: ResponderComponentType, viewId: string, responder: MessageResponder) {
+		console.log("!!! packages/lib/services/PostMessageService.ts registerCallback");
+		this.callbacks_[[type, viewId].join(':')] = responder;
+	}
+
+
 
 	public unregisterResponder(type: ResponderComponentType, viewId: string) {
 		delete this.responders_[[type, viewId].join(':')];
