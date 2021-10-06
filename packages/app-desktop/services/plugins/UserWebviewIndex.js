@@ -5,17 +5,17 @@ const webviewApiPromises_ = {};
 const webviewApi = {
 	postMessage: function(message) {
 
-		console.log("!!! 2/ packages/app-desktop/services/plugins/UserWebviewIndex.js is told to postMessage : ", message)
+		console.log('!!! 2/ packages/app-desktop/services/plugins/UserWebviewIndex.js is told to postMessage : ', message);
 
 		const messageId = `userWebview_${Date.now()}${Math.random()}`;
 
-		console.log("!!! 3/ packages/app-desktop/services/plugins/UserWebviewIndex.js creates the promise: ", message)
+		console.log('!!! 3/ packages/app-desktop/services/plugins/UserWebviewIndex.js creates the promise: ', message);
 
 		const promise = new Promise((resolve, reject) => {
 			webviewApiPromises_[messageId] = { resolve, reject };
 		});
 
-		console.log("!!! 3/ packages/app-desktop/services/plugins/UserWebviewIndex.js post message to the window: ", message)		
+		console.log('!!! 3/ packages/app-desktop/services/plugins/UserWebviewIndex.js post message to the window: ', message);
 
 		window.postMessage({
 			target: 'postMessageService.message',
@@ -122,7 +122,7 @@ const webviewApi = {
 
 			'postMessageService.response': (event) => {
 
-				console.log("!!! 12/ packages/app-desktop/services/plugins/UserWebviewIndex.js receives a postMessageService.response and resolve the promise that was recorded in postMessage : ", event);
+				console.log('!!! 12/ packages/app-desktop/services/plugins/UserWebviewIndex.js receives a postMessageService.response and resolve the promise that was recorded in postMessage : ', event);
 
 				const message = event.message;
 				const promise = webviewApiPromises_[message.responseId];
@@ -138,17 +138,17 @@ const webviewApi = {
 				}
 			},
 
-			//Call it when we receive a message from PostMessageService
+			// Call it when we receive a message from PostMessageService
 			// that is if the postmessageservice is what we need
 			'postMessageService.plugin_message': (event) => {
-				//call registered cllback
+				// call registered cllback
 			},
 		};
 
-		//respond to window.postMessage({})
+		// respond to window.postMessage({})
 		window.addEventListener('message', ((event) => {
 
-			console.log("!!! 11/ packages/app-desktop/services/plugins/UserWebviewIndex.js listen to channel message : ", event);
+			console.log('!!! 11/ packages/app-desktop/services/plugins/UserWebviewIndex.js listen to channel message : ', event);
 
 
 			if (!event.data || event.data.target !== 'webview') return;

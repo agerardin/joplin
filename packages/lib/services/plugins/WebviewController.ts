@@ -105,7 +105,7 @@ export default class WebviewController extends ViewController {
 
 	public async emitMessage(event: EmitMessageEvent): Promise<any> {
 
-		console.log("!!! the message is received by packages/lib/services/plugins/WebviewController.ts and we will call the plugin callback ");
+		console.log('!!! the message is received by packages/lib/services/plugins/WebviewController.ts and we will call the plugin callback ');
 
 		if (!this.messageListener_) return;
 		return this.messageListener_(event.message);

@@ -71,7 +71,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 			void CommandService.instance().execute(commandName, ...commandArgs);
 		} else if (msg === 'postMessageService.message') {
 
-			console.log("!!! packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.ts receive : postMessageService.message : ", arg0)
+			console.log('!!! packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.ts receive : postMessageService.message : ', arg0);
 
 			void PostMessageService.instance().postMessage(arg0);
 		} else {
