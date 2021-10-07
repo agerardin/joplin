@@ -78,6 +78,11 @@ export default class JoplinViewsPanels {
 		return this.controller(handle).onMessage(callback);
 	}
 
+	public postMessage(handle: ViewHandle, message: any) {
+		return this.controller(handle).postMessage(message);
+	}
+
+
 	/**
 	 * Shows the panel
 	 */
