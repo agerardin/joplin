@@ -75,11 +75,12 @@ export default class PostMessageService {
 		let response = null;
 		let error = null;
 
+		if (message.from === MessageParticipant.Plugin && message.to === MessageParticipant.UserWebview) {
+			this.callback(message);
+			return;
+		}
+
 		try {		
-			if (message.from === MessageParticipant.Plugin && message.to === MessageParticipant.UserWebview) {
-				this.callback(message);
-				return;
-			}
 			if (message.from === MessageParticipant.ContentScript && message.to === MessageParticipant.Plugin) {
 				const pluginId = PluginService.instance().pluginIdByContentScriptId(message.contentScriptId);
 				if (!pluginId) throw new Error(`Could not find plugin associated with content script "${message.contentScriptId}"`);
@@ -99,11 +100,18 @@ export default class PostMessageService {
 	}
 
 	private callback(message: Message) {
+
 		let callback = this.callbacks_[[ResponderComponentType.UserWebview, message.viewId].join(':')];
+
+		if(!callback) {
+			logger.warn('Cannot receive message because no callback was found', message);
+		}
+
 		callback(message.content);
 	}
 
 	private sendResponse(message: Message, responseContent: any, error: any) {
+		
 		let responder: MessageResponder = null;
 
 		if (message.from === MessageParticipant.ContentScript) {
@@ -124,12 +132,10 @@ export default class PostMessageService {
 	}
 
 	private responder(type: ResponderComponentType, viewId: string): any {
-
 		return this.responders_[[type, viewId].join(':')];
 	}
 
 	public registerResponder(type: ResponderComponentType, viewId: string, responder: MessageResponder) {
-
 		this.responders_[[type, viewId].join(':')] = responder;
 	}
 
@@ -137,7 +143,9 @@ export default class PostMessageService {
 		this.callbacks_[[type, viewId].join(':')] = callback;
 	}
 
-
+	public unregisterCallback(type: ResponderComponentType, viewId: string) {
+		delete this.callbacks_[[type, viewId].join(':')];
+	}
 
 	public unregisterResponder(type: ResponderComponentType, viewId: string) {
 		delete this.responders_[[type, viewId].join(':')];

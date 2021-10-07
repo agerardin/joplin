@@ -27,7 +27,7 @@ const webviewApi = {
 	onMessage: function(cb) {
 		cb_ = cb;
 		window.postMessage({
-			target: 'postMessageService.register'
+			target: 'postMessageService.registerCallback'
 		});
 	}
 };
@@ -137,6 +137,10 @@ const webviewApi = {
 			},
 
 			'postMessageService.plugin_message': (message) => {
+				if(!cb_) {
+					console.warn('postMessageService.plugin_message: could not find callback for message', message);
+					return;
+				}
 				cb_(message);
 			},
 		};

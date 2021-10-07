@@ -21,13 +21,11 @@ export default function(frameWindow: any, isReady: boolean, pluginId: string, vi
 				return;
 			}
 			
-			if (event.data.target === 'postMessageService.register') {
+			if (event.data.target === 'postMessageService.registerCallback') {
 				PostMessageService.instance().registerCallback(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {
 					postMessage('postMessageService.plugin_message', { message });
 				});
-				return;
 			}
-			//TODO could add unregister message to remove callback
 			else if (event.data.target === 'postMessageService.message') {
 				void PostMessageService.instance().postMessage({
 					pluginId,
