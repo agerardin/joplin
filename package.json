@@ -47,6 +47,11 @@
     "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website/build.js --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 docs -a localhost\"",
     "i": "lerna add --no-bootstrap --scope"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.6.0",
