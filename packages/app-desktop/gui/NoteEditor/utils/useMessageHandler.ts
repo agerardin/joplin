@@ -70,9 +70,6 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 			const commandArgs = arg0.args || [];
 			void CommandService.instance().execute(commandName, ...commandArgs);
 		} else if (msg === 'postMessageService.message') {
-
-			console.log('!!! packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.ts receive : postMessageService.message : ', arg0);
-
 			void PostMessageService.instance().postMessage(arg0);
 		} else {
 			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
